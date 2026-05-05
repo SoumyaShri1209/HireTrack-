@@ -1,20 +1,26 @@
-# Backend
-backend/node_modules/
-backend/.env
-backend/uploads/
-backend/*.log
+# ─── Backend ────────────────────────────
+hiretrack-backend/node_modules/
+hiretrack-backend/.env
+hiretrack-backend/.env.local
+hiretrack-backend/uploads/
+hiretrack-backend/*.log
 
-# Frontend
-frontend/node_modules/
-frontend/dist/
-frontend/.env
-frontend/.env.local
+# ─── Frontend ───────────────────────────
+hiretrack-frontend/node_modules/
+hiretrack-frontend/dist/
+hiretrack-frontend/.env
+hiretrack-frontend/.env.local
 
-# OS files
+# ─── OS Files ───────────────────────────
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# IDE
+# ─── IDE ────────────────────────────────
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# ─── Misc ──────────────────────────────
+*.log
