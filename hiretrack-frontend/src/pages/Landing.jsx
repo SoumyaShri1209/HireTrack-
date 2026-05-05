@@ -469,7 +469,7 @@ const Landing = () => {
           <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text-secondary)', fontSize: 13 }}>HireTrack</span>
         </div>
         <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-          © 2026 HireTrack · Built by Soumya Shri · AI-Powered Career Intelligence
+          © 2026 HireTrack · Built by Soumya Shri & Shruti Sinha · AI-Powered Career Intelligence
         </p>
         <div style={{ display: 'flex', gap: 16 }}>
           <Link to="/login" style={{ fontSize: 12, color: 'var(--text-muted)', textDecoration: 'none' }}
