@@ -289,7 +289,7 @@ const Login = () => {
           {/* Google OAuth */}
           <button
             type="button"
-            onClick={() => { window.location.href = 'http://localhost:5000/api/auth/google'; }}
+            onClick={() => { window.location.href = import.meta.env.VITE_GOOGLE_AUTH_URL || 'http://localhost:5000/api/auth/google'; }}
             className="btn-ghost"
             style={{
               width: '100%',

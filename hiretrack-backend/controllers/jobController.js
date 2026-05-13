@@ -88,23 +88,33 @@ const getJobFeed = async (req, res) => {
     const filteredJobs = scoredJobs.filter(job => job.matchScore >= minScore);
 
 
-    // ── Send high‑match alerts ──
+// ── Send high‑match alerts (max once per day) ──
 const highMatches = scoredJobs.filter(j => j.matchScore >= 70);
 if (highMatches.length > 0) {
   try {
     const user = await User.findById(userId);
     if (user && user.email) {
-      // Separate jobs and internships if needed
-      const jobs = highMatches.filter(j => j.employmentType !== 'INTERN');
-      const internships = highMatches.filter(j => j.employmentType === 'INTERN');
+      const now = new Date();
+      const lastSent = user.notificationPreferences?.lastHighMatchAlertSent;
+      const oneDay = 24 * 60 * 60 * 1000;
 
-      if (jobs.length && user.notificationPreferences?.newJobAlerts) {
-        emailService.sendHighMatchJobs(user.email, user.name, jobs.slice(0, 5), 'job')
-          .catch(err => console.error('❌ Job alert email failed:', err));
-      }
-      if (internships.length && user.notificationPreferences?.internshipAlerts) {
-        emailService.sendHighMatchJobs(user.email, user.name, internships.slice(0, 5), 'internship')
-          .catch(err => console.error('❌ Internship alert email failed:', err));
+      // Only send if never sent before, or more than 24 hours ago
+      if (!lastSent || (now - new Date(lastSent)) > oneDay) {
+        const jobs = highMatches.filter(j => j.employmentType !== 'INTERN');
+        const internships = highMatches.filter(j => j.employmentType === 'INTERN');
+
+        if (jobs.length && user.notificationPreferences?.newJobAlerts) {
+          emailService.sendHighMatchJobs(user.email, user.name, jobs.slice(0, 5), 'job')
+            .catch(err => console.error('❌ Job alert email failed:', err));
+        }
+        if (internships.length && user.notificationPreferences?.internshipAlerts) {
+          emailService.sendHighMatchJobs(user.email, user.name, internships.slice(0, 5), 'internship')
+            .catch(err => console.error('❌ Internship alert email failed:', err));
+        }
+
+        // Update the timestamp after sending
+        user.notificationPreferences.lastHighMatchAlertSent = now;
+        await user.save();
       }
     }
   } catch (e) {

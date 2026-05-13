@@ -64,6 +64,7 @@ const userSchema = new mongoose.Schema(
       offerExpiry: { type: Boolean, default: true },
       dailyDigest: { type: Boolean, default: false },
       weeklyDigest: { type: Boolean, default: false },
+      lastHighMatchAlertSent: Date,  
     },
     notifications: {
       newMatches: { type: Boolean, default: true },
@@ -80,11 +81,15 @@ const userSchema = new mongoose.Schema(
 // ────────────────────────────────────────────────────────────────
 // ✅ CORRECT PRE-SAVE HOOK — async/await style (NO next needed)
 // ────────────────────────────────────────────────────────────────
-userSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
-  
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 // ────────────────────────────────────────────────────────────────
