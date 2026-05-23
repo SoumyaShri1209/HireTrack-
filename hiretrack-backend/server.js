@@ -1,20 +1,19 @@
+// ✅ dotenv FIRST — before any other require
 const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 
-
 const connectDB = require('./config/db');
-const passport = require('./config/passport'); 
+const passport = require('./config/passport');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./utils/swagger');
 
 require('./utils/cronJobs')();
-
-// Load env variables FIRST
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();
@@ -24,7 +23,7 @@ const app = express();
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (process.env.FRONTEND_URL || 'http://localhost:5173').trim().replace(/\/$/, ''),
   credentials: true
 }));
 app.use(morgan('dev'));
@@ -45,7 +44,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Routes
-app.use('/api/auth', require('./routes/authRoutes'));  
+app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/resume', require('./routes/resume'));
 app.use('/api/jobs', require('./routes/jobRoutes'));
 app.use('/api/applications', require('./routes/applicationRoutes'));
