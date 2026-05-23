@@ -50,7 +50,7 @@ app.use('/api/resume', require('./routes/resume'));
 app.use('/api/jobs', require('./routes/jobRoutes'));
 app.use('/api/applications', require('./routes/applicationRoutes'));
 app.use('/api/offers', require('./routes/offerRoutes'));
-app.use('/api/activity', require('./routes/activityRoutes'));1
+app.use('/api/activity', require('./routes/activityRoutes'));
 
 // 404 Handler
 app.use((req, res) => {
