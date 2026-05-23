@@ -6,7 +6,7 @@ const emailService = require('../services/emailService');
 
 const startScheduledJobs = () => {
   // Temporarily set to every minute for testing – change back to '0 8 * * *' after verification
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 8 * * *', async () => {
     console.log('🔔 Running daily notification checks...');
 
     // ── Assignment deadlines (within 2 days) ──

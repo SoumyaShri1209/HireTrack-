@@ -15,6 +15,7 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    // Check for existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
@@ -23,7 +24,8 @@ exports.register = async (req, res) => {
       });
     }
 
-    // ✅ Password will be hashed automatically by the pre-save hook
+    // 🔨 Manual password hashing (bypasses the pre‑save hook)
+  
     const user = await User.create({ name, email, password });
 
     const accessToken = user.generateAccessToken();
